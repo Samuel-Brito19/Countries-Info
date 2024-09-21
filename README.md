@@ -4,7 +4,7 @@ TWelcome to our Country Info app! Here, you can explore detailed information abo
 
 ## Technologies used
 
-**Frontend**: React.js, Vite, Typescript, Styled-Components
+**Frontend**: React.js, Vite, Typescript, Styled-Components <br>
 **Backend**: Node.js, Express
 
 ## Set Up
