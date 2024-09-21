@@ -87,19 +87,14 @@ const CountryPage = () => {
     fetchPopulation();
   }, [country]);
 
-  // useEffect(() => {
-
-  //   fetchPopulation();
-  // }, [country]);
-
   const ChartData = (): JSX.Element => {
     const ref = useRef();
     const barChartData = {
-      labels: population?.data.populationCounts.map((p) => p.year) || [],
+      labels: population?.data?.populationCounts.map((p) => p.year) || [],
       datasets: [
         {
           label: "Population over the years",
-          data: population?.data.populationCounts.map((p) => p.value) || [],
+          data: population?.data?.populationCounts.map((p) => p.value) || [],
           backgroundColor: [
             "rgba(75,192,192,1)",
             "#50AF95",
@@ -125,8 +120,8 @@ const CountryPage = () => {
       <Styled.ContentContainer>
         <Styled.FlagContainer>
           <h2>{country?.commonName}</h2>
-          {flags?.data.flag && (
-            <img src={flags?.data.flag} width="50" height="30" />
+          {flags?.data?.flag && (
+            <img src={flags?.data?.flag} width="50" height="30" />
           )}
         </Styled.FlagContainer>
 
