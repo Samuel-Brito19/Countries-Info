@@ -35,7 +35,7 @@ router.post("/population", async (req, res) => {
 });
 
 router.post("/flag", async (req, res) => {
-  const { iso2 } = req.body;
+  const { country } = req.body;
   try {
     const response = await fetch(
       "https://countriesnow.space/api/v0.1/countries/flag/images",
@@ -44,7 +44,7 @@ router.post("/flag", async (req, res) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ iso2: req.body.iso2 }),
+        body: JSON.stringify({ country: req.body.country }),
       }
     );
     const data = await response.json();

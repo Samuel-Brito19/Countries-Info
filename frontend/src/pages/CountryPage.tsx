@@ -39,20 +39,6 @@ const CountryPage = () => {
   const params = useParams();
 
   useEffect(() => {
-    const fetchFlag = async () => {
-      try {
-        const response = await api.post("http://localhost:3000/flag", {
-          iso2: params.code,
-        });
-        setFlags(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchFlag();
-  }, []);
-
-  useEffect(() => {
     const fetchCountry = async () => {
       try {
         const response = await api.post(
@@ -65,6 +51,21 @@ const CountryPage = () => {
     };
     fetchCountry();
   }, [params]);
+
+  useEffect(() => {
+    const fetchFlag = async () => {
+      if (!country) return;
+      try {
+        const response = await api.post("http://localhost:3000/flag", {
+          country: country?.commonName,
+        });
+        setFlags(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchFlag();
+  }, [country]);
 
   useEffect(() => {
     const fetchPopulation = async () => {
@@ -86,11 +87,11 @@ const CountryPage = () => {
   const ChartData = (): JSX.Element => {
     const ref = useRef();
     const barChartData = {
-      labels: population?.data.populationCounts.map((p) => p.year),
+      labels: population?.data.populationCounts.map((p) => p.year) || [],
       datasets: [
         {
           label: "Population over the years",
-          data: population?.data.populationCounts.map((p) => p.value),
+          data: population?.data.populationCounts.map((p) => p.value) || [],
           backgroundColor: [
             "rgba(75,192,192,1)",
             "#50AF95",
@@ -104,22 +105,23 @@ const CountryPage = () => {
     };
     return <Bar data={barChartData} ref={ref} />;
   };
+  if (!country || !flags || !population) {
+    return <div>Loading...</div>; // Show a loading state
+  }
 
-  if (!flags) return <div>Loading...</div>;
   return (
     <Styled.Container>
       <Link to={`/`}>
         <FaArrowLeft />
       </Link>
-      {flags && country && (
-        <Styled.FlagContainer>
-          <h2>{country?.commonName}</h2>{" "}
-          <img src={flags.data.flag} width="50" height="30" />
-        </Styled.FlagContainer>
-      )}
+      <Styled.FlagContainer>
+        <h2>{country?.commonName}</h2>
+        {flags && <img src={flags?.data.flag} width="50" height="30" />}
+      </Styled.FlagContainer>
+
       <h3>Border Countries:</h3>
       <ul>
-        {country?.borders ? (
+        {country?.borders && country.borders.length > 0 ? (
           country?.borders.map((c) => (
             <li key={c.countryCode}>
               <Link to={`/country/${c.countryCode}`}>{c.commonName}</Link>
@@ -130,7 +132,9 @@ const CountryPage = () => {
         )}
       </ul>
       <h3>Population Over Time:</h3>
-      <ChartData />
+      <Styled.ChartContainer>
+        <ChartData />
+      </Styled.ChartContainer>
     </Styled.Container>
   );
 };

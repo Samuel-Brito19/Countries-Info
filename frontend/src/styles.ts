@@ -13,3 +13,9 @@ export const FlagContainer = styled.div`
   gap: 10px;
   width: 100%;
 `;
+
+export const ChartContainer = styled.div`
+  position: relative;
+  height: 40vh;
+  width: 80vw;
+`;
