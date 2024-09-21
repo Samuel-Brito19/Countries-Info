@@ -1,7 +1,15 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-`
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
+
+export const FlagContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+`;
