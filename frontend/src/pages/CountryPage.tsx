@@ -59,30 +59,38 @@ const CountryPage = () => {
         const response = await api.post("http://localhost:3000/flag", {
           country: country?.commonName,
         });
-        setFlags(response.data);
+        if (response.data) {
+          setFlags(response.data);
+        } else {
+          console.log("HI");
+        }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchFlag();
-  }, [country]);
-
-  useEffect(() => {
     const fetchPopulation = async () => {
-      if (!country) {
-        return;
-      }
+      if (!country) return;
       try {
         const response = await api.post(`http://localhost:3000/population`, {
           country: country?.commonName,
         });
-        setPopulation(response.data);
+        if (response.data) {
+          setPopulation(response.data);
+        } else {
+          console.log("HI 2");
+        }
       } catch (error) {
-        console.log(error);
+        console.log("Caiu no erro");
       }
     };
+    fetchFlag();
     fetchPopulation();
   }, [country]);
+
+  // useEffect(() => {
+
+  //   fetchPopulation();
+  // }, [country]);
 
   const ChartData = (): JSX.Element => {
     const ref = useRef();
@@ -103,38 +111,42 @@ const CountryPage = () => {
         },
       ],
     };
+    if (!flags || !population) {
+      return <div>Loading...</div>;
+    }
     return <Bar data={barChartData} ref={ref} />;
   };
-  if (!country || !flags || !population) {
-    return <div>Loading...</div>; // Show a loading state
-  }
 
   return (
     <Styled.Container>
       <Link to={`/`}>
         <FaArrowLeft />
       </Link>
-      <Styled.FlagContainer>
-        <h2>{country?.commonName}</h2>
-        {flags && <img src={flags?.data.flag} width="50" height="30" />}
-      </Styled.FlagContainer>
+      <Styled.ContentContainer>
+        <Styled.FlagContainer>
+          <h2>{country?.commonName}</h2>
+          {flags?.data.flag && (
+            <img src={flags?.data.flag} width="50" height="30" />
+          )}
+        </Styled.FlagContainer>
 
-      <h3>Border Countries:</h3>
-      <ul>
-        {country?.borders && country.borders.length > 0 ? (
-          country?.borders.map((c) => (
-            <li key={c.countryCode}>
-              <Link to={`/country/${c.countryCode}`}>{c.commonName}</Link>
-            </li>
-          ))
-        ) : (
-          <li>No border countries</li>
-        )}
-      </ul>
-      <h3>Population Over Time:</h3>
-      <Styled.ChartContainer>
-        <ChartData />
-      </Styled.ChartContainer>
+        <h3>Border Countries:</h3>
+        <ul>
+          {country?.borders && country.borders.length > 0 ? (
+            country?.borders.map((c) => (
+              <li key={c.countryCode}>
+                <Link to={`/country/${c.countryCode}`}>{c.commonName}</Link>
+              </li>
+            ))
+          ) : (
+            <li>No border countries</li>
+          )}
+        </ul>
+        <h3>Population Over Time:</h3>
+        <Styled.ChartContainer>
+          <ChartData />
+        </Styled.ChartContainer>
+      </Styled.ContentContainer>
     </Styled.Container>
   );
 };
