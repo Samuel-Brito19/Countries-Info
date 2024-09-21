@@ -62,7 +62,6 @@ const CountryPage = () => {
         if (response.data) {
           setFlags(response.data);
         } else {
-          console.log("HI");
         }
       } catch (error) {
         console.log(error);
@@ -77,10 +76,9 @@ const CountryPage = () => {
         if (response.data) {
           setPopulation(response.data);
         } else {
-          console.log("HI 2");
         }
       } catch (error) {
-        console.log("Caiu no erro");
+        console.log(error);
       }
     };
     fetchFlag();
